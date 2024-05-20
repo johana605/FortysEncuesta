@@ -1,0 +1,25 @@
+<!-- templates/survey.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h2>Encuesta de Satisfacción</h2>
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.satisfaction.label }}<br>
+      {{ form.satisfaction(size=32) }}
+    </p>
+    <p>
+      {{ form.recommendation.label }}<br>
+      {{ form.recommendation() }}
+    </p>
+    <p>
+      {{ form.product_type.label }}<br>
+      {{ form.product_type() }}
+    </p>
+    <p>
+      {{ form.comments.label }}<br>
+      {{ form.comments(rows=4, cols=32) }}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}
