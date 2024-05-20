@@ -1,19 +1,35 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+# app.py
+from flask import Flask, render_template, redirect, url_for
 from config import Config
+from models import db, Survey
+from forms import SurveyForm
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+
+# Inicializar la base de datos
+db.init_app(app)
 migrate = Migrate(app, db)
 
-class Survey(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    satisfaction = db.Column(db.Integer, nullable=False)
-    recommendation = db.Column(db.String(3), nullable=False)
-    product_type = db.Column(db.String(50), nullable=False)
-    comments = db.Column(db.Text, nullable=True)
+@app.route('/', methods=['GET', 'POST'])
+def survey():
+    form = SurveyForm()
+    if form.validate_on_submit():
+        survey = Survey(
+            satisfaction=form.satisfaction.data,
+            recommendation=form.recommendation.data,
+            product_type=form.product_type.data,
+            comments=form.comments.data
+        )
+        db.session.add(survey)
+        db.session.commit()
+        return redirect(url_for('thank_you'))
+    return render_template('survey.html', form=form)
+
+@app.route('/thank_you')
+def thank_you():
+    return render_template('thank_you.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
