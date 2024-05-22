@@ -1,7 +1,3 @@
-alembic
-blinker
-click
-colorama
 Flask
 Flask-Migrate
 Flask-SQLAlchemy
@@ -21,3 +17,4 @@ typing_extensions
 tzdata
 Werkzeug
 WTForms
+gunicorn
